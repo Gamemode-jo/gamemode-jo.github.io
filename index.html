@@ -2,10 +2,63 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Meu site</title>
+  <title>Site com Senha</title>
+
+  <style>
+    /* ====== ESTILO GERAL ====== */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 300px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .mensagem {
+      margin-top: 20px;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Olá, mundo!</h1>
-  <p>Meu site está no GitHub Pages 🎉</p>
-</body>
-</html>
+
+  <div class="container">
+    <h2>Digite a senha</h2>
+
+    <input type="password" id="senhaInput" placeholder="Senha">
+    <button onclick="verificarSenha()">Confirmar</button>
+
+    <!-- Conteúdo que aparece depois da senha correta -->
+    <div id="conteudoSecreto" class="hidden mensagem">
+      <p>Senha correta! 🎉</p>
+      <p>Digite algo abaixo:

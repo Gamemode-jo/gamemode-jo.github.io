@@ -2,10 +2,9 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Site com Senha</title>
+  <title>Etapas de Senha</title>
 
   <style>
-    /* ====== ESTILO GERAL ====== */
     body {
       margin: 0;
       height: 100vh;
@@ -22,30 +21,19 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       text-align: center;
-      width: 300px;
+      width: 320px;
     }
 
-    input {
+    input, button {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 16px;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 15px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .hidden {
-      display: none;
     }
 
     .mensagem {
       margin-top: 20px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -53,30 +41,80 @@
 <body>
 
   <div class="container">
-    <h2>Digite a senha</h2>
+    <h2 id="titulo">Etapa 1</h2>
 
-    <input type="password" id="senhaInput" placeholder="Senha">
-    <button onclick="verificarSenha()">Confirmar</button>
+    <input type="password" id="inputSenha" placeholder="Digite a senha">
+    <button id="botaoSenha" onclick="verificarSenha()">Confirmar</button>
 
-    <!-- Conteúdo que aparece depois da senha correta -->
-    <div id="conteudoSecreto" class="hidden mensagem">
-      <p>Senha correta! 🎉</p>
-      <p>Digite algo abaixo:</p>
-      <input type="text" placeholder="Novo campo">
+    <div id="mensagem" class="mensagem"></div>
+
+    <!-- Campo FINAL: nome -->
+    <div id="final" style="display: none;">
+      <input type="text" id="nomeFinal" placeholder="Digite seu nome">
+      <button onclick="enviarNome()">Enviar</button>
+      <p id="confirmacao"></p>
     </div>
   </div>
 
   <script>
-    function verificarSenha() {
-      const senhaCorreta = "1234"; // <-- MUDE A SENHA AQUI
-      const senhaDigitada = document.getElementById("senhaInput").value;
-      const conteudo = document.getElementById("conteudoSecreto");
+    /* ====== CONFIGURAÇÃO DAS ETAPAS ====== */
+    const etapas = [
+      { senha: "123", texto: "Parabéns! Você passou da primeira etapa." },
+      { senha: "abc", texto: "Muito bem! Esta é a segunda etapa." },
+      { senha: "senhaFinal", texto: "Você chegou ao final! 🎉" }
+    ];
 
-      if (senhaDigitada === senhaCorreta) {
-        conteudo.classList.remove("hidden");
+    let etapaAtual = 0;
+
+    function verificarSenha() {
+      const input = document.getElementById("inputSenha");
+      const mensagem = document.getElementById("mensagem");
+      const titulo = document.getElementById("titulo");
+
+      if (input.value === etapas[etapaAtual].senha) {
+        mensagem.textContent = etapas[etapaAtual].texto;
+        input.value = "";
+        etapaAtual++;
+
+        if (etapaAtual < etapas.length) {
+          titulo.textContent = "Etapa " + (etapaAtual + 1);
+        } else {
+          // Fim das etapas
+          titulo.textContent = "Fim";
+          input.style.display = "none";
+          document.getElementById("botaoSenha").style.display = "none";
+          document.getElementById("final").style.display = "block";
+        }
       } else {
         alert("Senha incorreta");
       }
+    }
+
+    /* ====== ENVIO PARA GOOGLE FORMS ====== */
+    function enviarNome() {
+      const nome = document.getElementById("nomeFinal").value.trim();
+      const confirmacao = document.getElementById("confirmacao");
+
+      if (nome === "") {
+        alert("Digite um nome");
+        return;
+      }
+
+      /* 🔴 CONFIGURAÇÃO DO SEU FORMULÁRIO */
+      const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScKsV0mIvK_mwoWQyF8LeTy5am8BKLlopS1UAhJ8afEaVs2GA/formResponse";
+      const ENTRY_ID = "entry.459144471";
+
+      const dados = new URLSearchParams();
+      dados.append(ENTRY_ID, nome);
+
+      fetch(FORM_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: dados
+      });
+
+      confirmacao.textContent = "Obrigado por participar!";
+      document.getElementById("nomeFinal").style.display = "none";
     }
   </script>
 

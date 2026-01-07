@@ -50,7 +50,7 @@
 
     <!-- Campo FINAL: nome -->
     <div id="final" style="display: none;">
-      <input type="text" id="nomeFinal" placeholder="Digite o nome da sua equipe">
+      <input type="text" id="nomeFinal" placeholder="Nome da equipe">
       <button onclick="enviarNome()">Enviar</button>
       <p id="confirmacao"></p>
     </div>
@@ -63,7 +63,7 @@
       { senha: "abc", texto: "Intravenoso" },
       { senha: "123", texto: "Muito bem! a terceira pista está aqui: https://www.canva.com/design/DAG9w9BJFPI/ftTNuOiteU2eJ6PMnGZphA/view?utm_content=DAG9w9BJFPI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h2f1af36bbf" },
       { senha: "HARDCOVER", texto: "Uau! Agora é só esperar até a divulgação dos ganhadores!" },
-      { senha: "pit", texto: "nome a seguir" }
+      { senha: "pit", texto: "Digite o nome da sua equipe para a premiação" }
     ];
 
     let etapaAtual = 0;
@@ -82,7 +82,7 @@
           titulo.textContent = "Etapa " + (etapaAtual + 1);
         } else {
           // Fim das etapas
-          titulo.textContent = "Fim";
+          titulo.textContent = "Fin.";
           input.style.display = "none";
           document.getElementById("botaoSenha").style.display = "none";
           document.getElementById("final").style.display = "block";

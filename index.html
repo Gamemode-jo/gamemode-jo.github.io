@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Etapas de Senha</title>
+  <title>Karg 4° Edição</title>
 
   <style>
     body {
@@ -41,16 +41,16 @@
 <body>
 
   <div class="container">
-    <h2 id="titulo">Etapa 1</h2>
+    <h2 id="titulo">Primeira fase</h2>
 
-    <input type="password" id="inputSenha" placeholder="Digite a senha">
+    <input type="password" id="inputSenha" placeholder="Senha">
     <button id="botaoSenha" onclick="verificarSenha()">Confirmar</button>
 
     <div id="mensagem" class="mensagem"></div>
 
     <!-- Campo FINAL: nome -->
     <div id="final" style="display: none;">
-      <input type="text" id="nomeFinal" placeholder="Digite seu nome">
+      <input type="text" id="nomeFinal" placeholder="Digite o nome da sua equipe">
       <button onclick="enviarNome()">Enviar</button>
       <p id="confirmacao"></p>
     </div>
@@ -59,9 +59,11 @@
   <script>
     /* ====== CONFIGURAÇÃO DAS ETAPAS ====== */
     const etapas = [
-      { senha: "123", texto: "Parabéns! Você passou da primeira etapa." },
-      { senha: "abc", texto: "Muito bem! Esta é a segunda etapa." },
-      { senha: "senhaFinal", texto: "Você chegou ao final! 🎉" }
+      { senha: "CIFRA DE CESAR", texto: "Parabéns! a segunda pista é a seguinte: PBDRKAX PBKEX: ZFCOX AB ZBPXO" },
+      { senha: "abc", texto: "Intravenoso" },
+      { senha: "123", texto: "Muito bem! a terceira pista está aqui: https://www.canva.com/design/DAG9w9BJFPI/ftTNuOiteU2eJ6PMnGZphA/view?utm_content=DAG9w9BJFPI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h2f1af36bbf" },
+      { senha: "HARDCOVER", texto: "Uau! Agora é só esperar até a divulgação dos ganhadores!" },
+      { senha: "pit", texto: "nome a seguir" }
     ];
 
     let etapaAtual = 0;
@@ -86,7 +88,7 @@
           document.getElementById("final").style.display = "block";
         }
       } else {
-        alert("Senha incorreta");
+        alert("Digite o nome da sua equipe");
       }
     }
 

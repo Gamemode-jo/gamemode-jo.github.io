@@ -61,4 +61,24 @@
     <!-- Conteúdo que aparece depois da senha correta -->
     <div id="conteudoSecreto" class="hidden mensagem">
       <p>Senha correta! 🎉</p>
-      <p>Digite algo abaixo:
+      <p>Digite algo abaixo:</p>
+      <input type="text" placeholder="Novo campo">
+    </div>
+  </div>
+
+  <script>
+    function verificarSenha() {
+      const senhaCorreta = "1234"; // <-- MUDE A SENHA AQUI
+      const senhaDigitada = document.getElementById("senhaInput").value;
+      const conteudo = document.getElementById("conteudoSecreto");
+
+      if (senhaDigitada === senhaCorreta) {
+        conteudo.classList.remove("hidden");
+      } else {
+        alert("Senha incorreta");
+      }
+    }
+  </script>
+
+</body>
+</html>

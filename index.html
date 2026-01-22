@@ -1,124 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Karg 4° Edição</title>
-
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-    }
-
-    .container {
-      background-color: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
-      width: 320px;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 12px;
-      font-size: 16px;
-    }
-
-    .mensagem {
-      margin-top: 20px;
-      font-weight: bold;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Hub de Projetos</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; }
+        .container { max-width: 800px; margin: 50px auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
+        
+        /* Estilo dos Cards */
+        .card {
+            background: white; padding: 20px; border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s; cursor: pointer; text-decoration: none; color: #333;
+        }
+        .card:hover { transform: translateY(-10px); background: #e0e0e0; }
+        h1 { color: #2c3e50; }
+    </style>
 </head>
-
 <body>
 
-  <div class="container">
-    <h2 id="titulo">Primeira fase</h2>
+    <div class="container">
+        <h1>🚀 Bem-vindo ao meu Hub</h1>
+        <p>Escolha um dos projetos abaixo para explorar:</p>
 
-    <input type="password" id="inputSenha" placeholder="Senha">
-    <button id="botaoSenha" onclick="verificarSenha()">Confirmar</button>
+        <div class="grid">
+            <a href="projeto1/index.html" class="card">
+                <h3>Projeto 01</h3>
+                <p>Breve descrição do que este site faz.</p>
+            </a>
 
-    <div id="mensagem" class="mensagem"></div>
+            <a href="projeto2/index.html" class="card">
+                <h3>Projeto 02</h3>
+                <p>Outra ferramenta ou site que criei.</p>
+            </a>
 
-    <!-- Campo FINAL: nome -->
-    <div id="final" style="display: none;">
-      <input type="text" id="nomeFinal" placeholder="Nome da equipe">
-      <button onclick="enviarNome()">Enviar</button>
-      <p id="confirmacao"></p>
+            <a href="#" class="card">
+                <h3>Sobre Mim</h3>
+                <p>Saiba mais sobre quem sou.</p>
+            </a>
+        </div>
     </div>
-  </div>
-
-  <script>
-    /* ====== CONFIGURAÇÃO DAS ETAPAS ====== */
-    const etapas = [
-      { senha: "CIFRA DE CESAR", texto: "Parabéns! a segunda pista é a seguinte: PBDRKAX PBKEX: ZFCOX AB ZBPXO" },
-      { senha: "abc", texto: "Intravenoso" },
-      { senha: "123", texto: "Muito bem! a terceira pista está aqui: https://www.canva.com/design/DAG9w9BJFPI/ftTNuOiteU2eJ6PMnGZphA/view?utm_content=DAG9w9BJFPI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h2f1af36bbf" },
-      { senha: "HARDCOVER", texto: "Uau! Agora é só esperar até a divulgação dos ganhadores!" },
-      { senha: "pit", texto: "Digite o nome da sua equipe para a premiação" }
-    ];
-
-    let etapaAtual = 0;
-
-    function verificarSenha() {
-      const input = document.getElementById("inputSenha");
-      const mensagem = document.getElementById("mensagem");
-      const titulo = document.getElementById("titulo");
-
-      if (input.value === etapas[etapaAtual].senha) {
-        mensagem.textContent = etapas[etapaAtual].texto;
-        input.value = "";
-        etapaAtual++;
-
-        if (etapaAtual < etapas.length) {
-          titulo.textContent = "Etapa " + (etapaAtual + 1);
-        } else {
-          // Fim das etapas
-          titulo.textContent = "Fin.";
-          input.style.display = "none";
-          document.getElementById("botaoSenha").style.display = "none";
-          document.getElementById("final").style.display = "block";
-        }
-      } else {
-        alert("Senha errada");
-      }
-    }
-
-    /* ====== ENVIO PARA GOOGLE FORMS ====== */
-    function enviarNome() {
-      const nome = document.getElementById("nomeFinal").value.trim();
-      const confirmacao = document.getElementById("confirmacao");
-
-      if (nome === "") {
-        alert("Digite um nome");
-        return;
-      }
-
-      /* 🔴 CONFIGURAÇÃO DO SEU FORMULÁRIO */
-      const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScKsV0mIvK_mwoWQyF8LeTy5am8BKLlopS1UAhJ8afEaVs2GA/formResponse";
-      const ENTRY_ID = "entry.459144471";
-
-      const dados = new URLSearchParams();
-      dados.append(ENTRY_ID, nome);
-
-      fetch(FORM_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: dados
-      });
-
-      confirmacao.textContent = "Obrigado por participar!";
-      document.getElementById("nomeFinal").style.display = "none";
-    }
-  </script>
 
 </body>
 </html>

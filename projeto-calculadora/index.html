@@ -5,22 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desafio das Senhas</title>
     <style>
-        body { font-family: 'Courier New', Courier, monospace; background-color: #0a0a0a; color: #00ff00; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        .fase { display: none; text-align: center; border: 1px solid #00ff00; padding: 30px; border-radius: 10px; max-width: 500px; }
-        .fase.ativa { display: block; } /* Mostra apenas a fase atual */
-        input { background: #000; border: 1px solid #00ff00; color: #00ff00; padding: 10px; margin-top: 15px; width: 80%; text-align: center; }
-        button { background: #00ff00; color: #000; border: none; padding: 10px 20px; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        /* CONFIGURAÇÃO DO CORPO E FUNDO */
+        body { 
+            font-family: 'Courier New', Courier, monospace; 
+            background-color: #0a0a0a; 
+            color: #00ff00; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            overflow: hidden; /* Evita barras de rolagem estranhas por causa do canvas */
+        }
+
+        /* EFEITO MATRIX NO FUNDO */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Fica atrás de tudo */
+        }
+
+        /* ESTILO DAS JANELAS DE FASE */
+        .fase { 
+            display: none; 
+            text-align: center; 
+            border: 1px solid #00ff00; 
+            padding: 30px; 
+            border-radius: 10px; 
+            max-width: 500px; 
+            background-color: rgba(10, 10, 10, 0.9); /* Fundo escuro levemente transparente */
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            z-index: 1; 
+        }
+
+        .fase.ativa { display: block; }
+
+        /* ELEMENTOS DE INTERAÇÃO */
+        input { 
+            background: #000; 
+            border: 1px solid #00ff00; 
+            color: #00ff00; 
+            padding: 10px; 
+            margin-top: 15px; 
+            width: 80%; 
+            text-align: center; 
+            outline: none;
+        }
+
+        button { 
+            background: #00ff00; 
+            color: #000; 
+            border: none; 
+            padding: 10px 20px; 
+            margin-top: 10px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #008800;
+            color: #fff;
+        }
+
         .hint { font-size: 0.8em; color: #888; margin-top: 10px; }
-        #btn-voltar { position: absolute; top: 20px; left: 20px; color: #00ff00; text-decoration: none; }
+
+        #btn-voltar { 
+            position: absolute; 
+            top: 20px; 
+            left: 20px; 
+            color: #00ff00; 
+            text-decoration: none; 
+            font-weight: bold;
+            z-index: 2;
+        }
+
         img {
-            outline: 3px solid #00ff00; /* Linha verde de 3px */
-            outline-offset: 5px;       /* Espaço entre a imagem e a linha */
-            max-width: 100%;           /* Garante que não ultrapasse a tela */
-            border-radius: 5px;        /* Deixa as pontas da imagem levemente arredondadas */
-         }
+            outline: 3px solid #00ff00;
+            outline-offset: 5px;
+            max-width: 100%;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
     </style>
 </head>
 <body>
+
+    <canvas id="matrix-canvas"></canvas>
 
     <a href="../index.html" id="btn-voltar">← Sair do Desafio</a>
 
@@ -33,11 +108,13 @@
         <button onclick="verificar(1, 'escuro', 'fase2')">Desbloquear</button>
     </div>
 
-    <div id="fase2" class="fase"> <h2>Nível 2:</h2>
+    <div id="fase2" class="fase">
+        <h2>Nível 2:</h2>
         <p>jbqlalp</p>
         <p>Kxl ex pl rjx clojx ab obplisbo, bkqxl mbkpb clox ax zxfux!</p>
         <p><sub>Dica: (na imagem anterior)</sub></p>
-        <input type="text" id="input2" placeholder="Digite a senha..."> <br>
+        <input type="text" id="input2" placeholder="Digite a senha...">
+        <br>
         <button onclick="verificar(2, 'metodos', 'fase3')">Desbloquear</button>
     </div>
     
@@ -48,7 +125,8 @@
           Seu navegador não suporta o elemento de áudio.
         </audio>
         <p><sub>Ouça com atenção</sub></p>
-        <input type="text" id="input3" placeholder="Digite a senha..."> <br>
+        <input type="text" id="input3" placeholder="Digite a senha...">
+        <br>
         <button onclick="verificar(3, 'ouvinte', 'fase4')">Desbloquear</button>
     </div>
 
@@ -60,18 +138,58 @@
     </div>
 
     <script>
+        // LÓGICA DO JOGO
         function verificar(faseAtual, senhaCorreta, proximaFaseId) {
             const chute = document.getElementById('input' + faseAtual).value.toLowerCase().trim();
             
             if (chute === senhaCorreta) {
-                // Esconde a atual
                 document.getElementById('fase' + faseAtual).classList.remove('ativa');
-                // Mostra a próxima
                 document.getElementById(proximaFaseId).classList.add('ativa');
             } else {
                 alert("Senha incorreta. Tente novamente!");
             }
         }
+
+        // LÓGICA DO EFEITO MATRIX
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%'\"#&_(),.;:?!\\|{}<>[]^~";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#0F0";
+            ctx.font = fontSize + "px arial";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
     </script>
 </body>
 </html>

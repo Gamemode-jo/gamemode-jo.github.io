@@ -12,6 +12,12 @@
         button { background: #00ff00; color: #000; border: none; padding: 10px 20px; margin-top: 10px; cursor: pointer; font-weight: bold; }
         .hint { font-size: 0.8em; color: #888; margin-top: 10px; }
         #btn-voltar { position: absolute; top: 20px; left: 20px; color: #00ff00; text-decoration: none; }
+        img {
+            outline: 3px solid #00ff00; /* Linha verde de 3px */
+            outline-offset: 5px;       /* Espaço entre a imagem e a linha */
+            max-width: 100%;           /* Garante que não ultrapasse a tela */
+            border-radius: 5px;        /* Deixa as pontas da imagem levemente arredondadas */
+         }
     </style>
 </head>
 <body>
@@ -20,24 +26,37 @@
 
     <div id="fase1" class="fase ativa">
         <h2>Nível 1:</h2>
-        <img src="Primeira pista.png">
+        <img src="Primeira pista.png" alt="recarregue a página">
         <p><sub>Dica: edite a foto!</sub></p>
         <input type="text" id="input1" placeholder="Digite a senha...">
         <br>
         <button onclick="verificar(1, 'azul', 'fase2')">Desbloquear</button>
     </div>
 
-    <div id="fase2" class="fase">
+    <div id="fase2" class="fase ativa">
         <h2>Nível 2:</h2>
-        <p>Um áudio foi detectado...</p>
-        <p>🔊 [Som de algo quebrando]</p>
-        <p>O que quebra mas nunca cai?</p>
+        <p>jbqlalp</p>
+        <p>Kxl ex pl rjx clojx ab obplisbo, bkqxl mbkpb clox ax zxfux!</p>
+        <p><sub>Dica: (na imagem anterior)</sub></p>
+        <input type="text" id="input1" placeholder="Digite a senha...">
+        <br>
+        <button onclick="verificar(1, 'azul', 'fase2')">Desbloquear</button>
+    </div>
+    
+    <div id="fase3" class="fase">
+        <h2>Nível 3:</h2>
+        <audio controls>
+          <source src="Terceira pista.wav" type="audio/mpeg">
+  
+          Seu navegador não suporta o elemento de áudio.
+        </audio>
+        <p><sub>Ouça com atenção</sub></p>
         <input type="text" id="input2" placeholder="Digite a senha...">
         <br>
         <button onclick="verificar(2, 'sigilo', 'fase3')">Desbloquear</button>
     </div>
 
-    <div id="fase3" class="fase">
+    <div id="fase4" class="fase">
         <h2>Parabéns!</h2>
         <p>Você completou todos os desafios.</p>
         <img src="https://via.placeholder.com/150" alt="Imagem de Recompensa">

@@ -1,12 +1,61 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <h1>Meu Primeiro Projeto</h1>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio das Senhas</title>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background-color: #0a0a0a; color: #00ff00; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .fase { display: none; text-align: center; border: 1px solid #00ff00; padding: 30px; border-radius: 10px; max-width: 500px; }
+        .fase.ativa { display: block; } /* Mostra apenas a fase atual */
+        input { background: #000; border: 1px solid #00ff00; color: #00ff00; padding: 10px; margin-top: 15px; width: 80%; text-align: center; }
+        button { background: #00ff00; color: #000; border: none; padding: 10px 20px; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        .hint { font-size: 0.8em; color: #888; margin-top: 10px; }
+        #btn-voltar { position: absolute; top: 20px; left: 20px; color: #00ff00; text-decoration: none; }
+    </style>
+</head>
+<body>
 
-    <div style="padding: 10px;">
-        <a href="../index.html" style="text-decoration: none; color: #007bff; font-weight: bold;">
-            ← Voltar para o Hub
-        </a>
+    <a href="../index.html" id="btn-voltar">← Sair do Desafio</a>
+
+    <div id="fase1" class="fase ativa">
+        <h2>Nível 1</h2>
+        <p>A primeira senha é a cor do céu em um dia limpo.</p>
+        <input type="text" id="input1" placeholder="Digite a senha...">
+        <br>
+        <button onclick="verificar(1, 'azul', 'fase2')">Desbloquear</button>
     </div>
-  </body>
+
+    <div id="fase2" class="fase">
+        <h2>Nível 2</h2>
+        <p>Um áudio foi detectado...</p>
+        <p>🔊 [Som de algo quebrando]</p>
+        <p>O que quebra mas nunca cai?</p>
+        <input type="text" id="input2" placeholder="Digite a senha...">
+        <br>
+        <button onclick="verificar(2, 'sigilo', 'fase3')">Desbloquear</button>
+    </div>
+
+    <div id="fase3" class="fase">
+        <h2>Parabéns!</h2>
+        <p>Você completou todos os desafios.</p>
+        <img src="https://via.placeholder.com/150" alt="Imagem de Recompensa">
+        <p>Você é um mestre dos enigmas.</p>
+    </div>
+
+    <script>
+        function verificar(faseAtual, senhaCorreta, proximaFaseId) {
+            const chute = document.getElementById('input' + faseAtual).value.toLowerCase().trim();
+            
+            if (chute === senhaCorreta) {
+                // Esconde a atual
+                document.getElementById('fase' + faseAtual).classList.remove('ativa');
+                // Mostra a próxima
+                document.getElementById(proximaFaseId).classList.add('ativa');
+            } else {
+                alert("Senha incorreta. Tente novamente!");
+            }
+        }
+    </script>
+</body>
 </html>

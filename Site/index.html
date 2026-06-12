@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptNet - Rede Social para Criadores</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            color: #1a1a1a;
+        }
+
+        /* Header */
+        .header {
+            background: #10a37f;
+            color: white;
+            width: 100vw;
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            color: #10a37f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        .notification-bell {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        /* Layout Principal */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 250px 1fr 300px;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        /* Sidebar Esquerda */
+        .sidebar-left {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+
+        .profile-card {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #10a37f;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+            font-weight: bold;
+        }
+
+        .categories {
+            list-style: none;
+        }
+
+        .categories li {
+            padding: 12px 10px;
+            margin: 5px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .categories li:hover {
+            background: #f0f2f5;
+        }
+
+        /* Feed */
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .create-post {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .post-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1em;
+            resize: vertical;
+            margin-bottom: 15px;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .post-input:focus {
+            outline: none;
+            border-color: #10a37f;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background: #f0f2f5;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .publish-btn {
+            background: #10a37f;
+            color: white;
+            margin-left: auto;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .publish-btn:hover {
+            background: #0d8c6d;
+        }
+
+        .error-message {
+            background: #ff4757;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        /* Posts */
+        .post {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-15px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #10a37f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            min-width: 50px;
+        }
+
+        .user-info h4 { margin-bottom: 3px; }
+        .user-info span { color: #666; font-size: 0.9em; }
+
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .post-content h3 {
+            color: #10a37f;
+            margin-bottom: 10px;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: #f0f2f5;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px 15px 15px 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            position: relative;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .code-block::before {
+            content: "💻 Código";
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #10a37f;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #f0f2f5;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: #10a37f;
+        }
+
+        .post-interactions {
+            display: flex;
+            gap: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+        }
+
+        .interaction {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: color 0.3s;
+            user-select: none;
+        }
+
+        .interaction:hover { color: #10a37f; }
+        .interaction.liked  { color: #ff4757; }
+
+        /* Sidebar Direita */
+        .sidebar-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .widget {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .widget h3 {
+            margin-bottom: 15px;
+            color: #10a37f;
+            font-size: 1.1em;
+        }
+
+        /* Trending */
+        .trending-item {
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 8px;
+        }
+
+        .trending-item:hover { background: #f0f2f5; }
+
+        .trend-title {
+            font-weight: bold;
+            margin-bottom: 3px;
+            font-size: 0.95em;
+        }
+
+        .trend-count {
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        /* Usuários Online */
+        .online-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .online-user {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .online-dot {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1em;
+            position: relative;
+        }
+
+        .online-dot::after {
+            content: '';
+            width: 11px;
+            height: 11px;
+            background: #2ecc71;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            border: 2px solid white;
+        }
+
+        .online-name {
+            font-size: 0.75em;
+            color: #555;
+            text-align: center;
+            max-width: 50px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Sugestões */
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .suggestion-item:last-child { border-bottom: none; }
+
+        .suggestion-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.95em;
+            min-width: 38px;
+        }
+
+        .suggestion-info { flex: 1; }
+        .suggestion-info strong { font-size: 0.9em; display: block; }
+        .suggestion-info span { font-size: 0.8em; color: #888; }
+
+        .follow-btn {
+            background: #10a37f;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 0.82em;
+            cursor: pointer;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+
+        .follow-btn:hover { background: #0d8c6d; }
+        .follow-btn.following {
+            background: white;
+            color: #10a37f;
+            border: 1px solid #10a37f;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #10a37f;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.4s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to   { transform: translateX(0);   opacity: 1; }
+        }
+
+        /* Chat flutuante */
+        .chat-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #10a37f;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16,163,127,0.4);
+            transition: transform 0.3s;
+            z-index: 99;
+        }
+
+        .chat-btn:hover { transform: scale(1.05); }
+
+        @media (max-width: 968px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar-left, .sidebar-right { display: none; }
+            .nav-menu { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="header-content">
+        <a href="#" class="logo">🤖 PromptNet</a>
+
+        <ul class="nav-menu">
+            <li><a href="#">🏠 Início</a></li>
+            <li><a href="#">🔍 Explorar</a></li>
+            <li><a href="#">👥 Comunidades</a></li>
+            <li><a href="#">💡 Projetos</a></li>
+            <li><a href="#">📚 Biblioteca</a></li>
+        </ul>
+
+        <div class="user-menu">
+            <span class="notification-bell">🔔</span>
+            <div class="avatar">U</div>
+        </div>
+    </div>
+</header>
+
+<!-- Toast -->
+<div class="toast" id="toast">✅ Publicado com sucesso!</div>
+
+<!-- Container principal -->
+<div class="container">
+
+    <!-- Sidebar Esquerda -->
+    <aside class="sidebar-left">
+        <div class="profile-card">
+            <div class="profile-pic">U</div>
+            <h3>Usuário</h3>
+            <p style="color:#666">@user_prompts</p>
+            <p style="margin-top:10px;font-size:0.9em">Criador de conteúdo • Dev</p>
+        </div>
+
+        <ul class="categories">
+            <li>📝 Prompts</li>
+            <li>💻 Códigos</li>
+            <li>🎭 Personas</li>
+            <li>🚀 Projetos</li>
+            <li>👥 Grupos</li>
+            <li>📊 Experiências</li>
+            <li>⭐ Favoritos</li>
+            <li>💬 Mensagens</li>
+        </ul>
+    </aside>
+
+    <!-- Feed -->
+    <main class="feed" id="feedContainer">
+
+        <!-- Criar post -->
+        <div class="create-post">
+            <div class="error-message" id="errorMessage">⚠️ Escreva algo antes de publicar!</div>
+            <textarea class="post-input" id="postInput" placeholder="Compartilhe seu prompt, código ou experiência..."></textarea>
+            <div class="post-actions">
+                <button class="action-btn">📷 Foto</button>
+                <button class="action-btn">💻 Código</button>
+                <button class="action-btn">🎭 Persona</button>
+                <button class="action-btn">🔗 Link</button>
+                <button class="publish-btn" onclick="publishPost()">Publicar</button>
+            </div>
+        </div>
+
+        <!-- Post 1 -->
+        <article class="post">
+            <div class="post-header">
+                <div class="user-avatar">A</div>
+                <div class="user-info">
+                    <h4>Ana Silva</h4>
+                    <span>@ana_criativa • 2 horas atrás</span>
+                </div>
+            </div>
+            <div class="post-content">
+                <h3>🌟 Prompt para Criação de Personagens</h3>
+                <p>Compartilhando um prompt incrível que desenvolvi para criar personagens complexos para RPGs e narrativas. Tem funcionado super bem!</p>
+                <div class="code-block">Aja como um especialista em criação de personagens.
+Desenvolva um personagem com as seguintes características:
+- Background detalhado
+- Motivações e conflitos internos
+- Habilidades únicas
+- Relações interpessoais
+
+Inclua elementos surpreendentes que tornem o personagem memorável.</div>
+            </div>
+            <div class="tags">
+                <span class="tag">#prompts</span>
+                <span class="tag">#criação</span>
+                <span class="tag">#personagens</span>
+                <span class="tag">#RPG</span>
+            </div>
+            <div class="post-interactions">
+                <div class="interaction" onclick="toggleLike(this)">❤️ <span class="count">124</span> curtidas</div>
+                <div class="interaction">💬 45 comentários</div>
+                <div class="interaction">↗️ 89 compartilhamentos</div>
+                <div class="interaction">⭐ Salvar</div>
+            </div>
+        </article>
+
+        <!-- Post 2 -->
+        <article class="post">
+            <div class="post-header">
+                <div class="user-avatar" style="background:#ff6b6b">C</div>
+                <div class="user-info">
+                    <h4>Carlos Dev</h4>
+                    <span>@carlos_codes • 5 horas atrás</span>
+                </div>
+            </div>
+            <div class="post-content">
+                <h3>🚀 Projeto: Gerador de Imagens com ChatGPT</h3>
+                <p>Finalizei meu projeto de integração Python + ChatGPT para gerar descrições detalhadas e depois criar imagens. Código completo abaixo!</p>
+                <div class="code-block">import openai
+from PIL import Image
+import requests
+
+def generate_image_from_prompt(prompt):
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": f"Crie uma descrição para: {prompt}"}]
+    )
+    image_prompt = response.choices[0].message.content
+    # ... código continua ...</div>
+                <div class="post-image">🖼️ Preview do Projeto</div>
+            </div>
+            <div class="tags">
+                <span class="tag">#python</span>
+                <span class="tag">#chatgpt</span>
+                <span class="tag">#projeto</span>
+                <span class="tag">#DALL-E</span>
+            </div>
+            <div class="post-interactions">
+                <div class="interaction" onclick="toggleLike(this)">❤️ <span class="count">256</span> curtidas</div>
+                <div class="interaction">💬 89 comentários</div>
+                <div class="interaction">↗️ 156 compartilhamentos</div>
+                <div class="interaction">⭐ Salvar</div>
+            </div>
+        </article>
+
+        <!-- Post 3 -->
+        <article class="post">
+            <div class="post-header">
+                <div class="user-avatar" style="background:#6b5ce7">M</div>
+                <div class="user-info">
+                    <h4>Maria Designer</h4>
+                    <span>@maria_ux • 8 horas atrás</span>
+                </div>
+            </div>
+            <div class="post-content">
+                <h3>🎨 Prompt para UI/UX com IA</h3>
+                <p>Criei um prompt que gera wireframes textuais incríveis e ajuda a pensar em fluxos de usuário. Economizei horas de trabalho essa semana!</p>
+                <div class="code-block">Você é um especialista em UX/UI Design.
+Analise o seguinte contexto e gere:
+1. Estrutura de navegação ideal
+2. Hierarquia visual dos elementos
+3. Fluxo do usuário passo a passo
+4. Sugestões de componentes reutilizáveis
+
+Contexto: [descreva seu produto aqui]</div>
+            </div>
+            <div cl

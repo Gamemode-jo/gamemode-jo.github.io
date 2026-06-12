@@ -705,4 +705,200 @@ Analise o seguinte contexto e gere:
 
 Contexto: [descreva seu produto aqui]</div>
             </div>
-            <div cl
+            <div class="tags">
+                <span class="tag">#ux</span>
+                <span class="tag">#design</span>
+                <span class="tag">#prompts</span>
+                <span class="tag">#produtividade</span>
+            </div>
+            <div class="post-interactions">
+                <div class="interaction" onclick="toggleLike(this)">❤️ <span class="count">98</span> curtidas</div>
+                <div class="interaction">💬 31 comentários</div>
+                <div class="interaction">↗️ 72 compartilhamentos</div>
+                <div class="interaction">⭐ Salvar</div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- Sidebar Direita -->
+    <aside class="sidebar-right">
+
+        <!-- Usuários Online -->
+        <div class="widget">
+            <h3>🟢 Online agora</h3>
+            <div class="online-grid">
+                <div class="online-user">
+                    <div class="online-dot" style="background:#10a37f">A</div>
+                    <span class="online-name">Ana</span>
+                </div>
+                <div class="online-user">
+                    <div class="online-dot" style="background:#ff6b6b">C</div>
+                    <span class="online-name">Carlos</span>
+                </div>
+                <div class="online-user">
+                    <div class="online-dot" style="background:#6b5ce7">M</div>
+                    <span class="online-name">Maria</span>
+                </div>
+                <div class="online-user">
+                    <div class="online-dot" style="background:#f9a825">R</div>
+                    <span class="online-name">Rafael</span>
+                </div>
+                <div class="online-user">
+                    <div class="online-dot" style="background:#e91e63">J</div>
+                    <span class="online-name">Julia</span>
+                </div>
+                <div class="online-user">
+                    <div class="online-dot" style="background:#00bcd4">P</div>
+                    <span class="online-name">Pedro</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trending -->
+        <div class="widget">
+            <h3>🔥 Em alta</h3>
+            <div class="trending-item">
+                <div class="trend-title">#PromptEngineering</div>
+                <div class="trend-count">2.4k publicações</div>
+            </div>
+            <div class="trending-item">
+                <div class="trend-title">#GPT4Vision</div>
+                <div class="trend-count">1.8k publicações</div>
+            </div>
+            <div class="trending-item">
+                <div class="trend-title">#AutoGPT</div>
+                <div class="trend-count">1.1k publicações</div>
+            </div>
+            <div class="trending-item">
+                <div class="trend-title">#LangChain</div>
+                <div class="trend-count">874 publicações</div>
+            </div>
+            <div class="trending-item">
+                <div class="trend-title">#FineTuning</div>
+                <div class="trend-count">612 publicações</div>
+            </div>
+        </div>
+
+        <!-- Sugestões de perfis -->
+        <div class="widget">
+            <h3>👤 Sugeridos para você</h3>
+
+            <div class="suggestion-item">
+                <div class="suggestion-avatar" style="background:#e67e22">R</div>
+                <div class="suggestion-info">
+                    <strong>Rafael Oliveira</strong>
+                    <span>@rafael_ai • Dev & Pesquisador</span>
+                </div>
+                <button class="follow-btn" onclick="toggleFollow(this)">Seguir</button>
+            </div>
+
+            <div class="suggestion-item">
+                <div class="suggestion-avatar" style="background:#e91e63">J</div>
+                <div class="suggestion-info">
+                    <strong>Julia Santos</strong>
+                    <span>@julia_prompts • Escritora</span>
+                </div>
+                <button class="follow-btn" onclick="toggleFollow(this)">Seguir</button>
+            </div>
+
+            <div class="suggestion-item">
+                <div class="suggestion-avatar" style="background:#00bcd4">P</div>
+                <div class="suggestion-info">
+                    <strong>Pedro Costa</strong>
+                    <span>@pedro_ml • Machine Learning</span>
+                </div>
+                <button class="follow-btn" onclick="toggleFollow(this)">Seguir</button>
+            </div>
+        </div>
+
+    </aside>
+</div>
+
+<!-- Botão de chat flutuante -->
+<button class="chat-btn">💬 Chat</button>
+
+<script>
+    // ── PUBLICAR POST ──────────────────────────────────────────────
+    function publishPost() {
+        const input    = document.getElementById('postInput');
+        const errorMsg = document.getElementById('errorMessage');
+        const text     = input.value.trim();
+
+        if (!text) {
+            errorMsg.style.display = 'block';
+            setTimeout(() => errorMsg.style.display = 'none', 3000);
+            return;
+        }
+
+        const agora = new Date();
+        const hora  = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+        const novoPost = document.createElement('article');
+        novoPost.className = 'post';
+        novoPost.innerHTML = `
+            <div class="post-header">
+                <div class="user-avatar">U</div>
+                <div class="user-info">
+                    <h4>Usuário</h4>
+                    <span>@user_prompts • agora às ${hora}</span>
+                </div>
+            </div>
+            <div class="post-content">
+                <p>${text.replace(/\n/g, '<br>')}</p>
+            </div>
+            <div class="post-interactions">
+                <div class="interaction" onclick="toggleLike(this)">❤️ <span class="count">0</span> curtidas</div>
+                <div class="interaction">💬 0 comentários</div>
+                <div class="interaction">↗️ 0 compartilhamentos</div>
+                <div class="interaction">⭐ Salvar</div>
+            </div>
+        `;
+
+        // Insere logo após o bloco de criar post
+        const feed       = document.getElementById('feedContainer');
+        const createPost = feed.querySelector('.create-post');
+        feed.insertBefore(novoPost, createPost.nextSibling);
+
+        // Limpa o textarea
+        input.value = '';
+
+        // Mostra toast
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 3000);
+    }
+
+    // ── CURTIR ─────────────────────────────────────────────────────
+    function toggleLike(el) {
+        const countEl = el.querySelector('.count');
+        let count = parseInt(countEl.textContent);
+
+        if (el.classList.contains('liked')) {
+            el.classList.remove('liked');
+            countEl.textContent = count - 1;
+        } else {
+            el.classList.add('liked');
+            countEl.textContent = count + 1;
+        }
+    }
+
+    // ── SEGUIR ─────────────────────────────────────────────────────
+    function toggleFollow(btn) {
+        if (btn.classList.contains('following')) {
+            btn.classList.remove('following');
+            btn.textContent = 'Seguir';
+        } else {
+            btn.classList.add('following');
+            btn.textContent = 'Seguindo ✓';
+        }
+    }
+
+    // ── PUBLICAR COM ENTER (Ctrl+Enter) ────────────────────────────
+    document.getElementById('postInput').addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'Enter') publishPost();
+    });
+</script>
+
+</body>
+</html>
